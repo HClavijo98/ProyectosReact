@@ -4,7 +4,7 @@ import WinnerModal from './WinnerModal'
 import { TURNS } from '../constants'
 import confetti from 'canvas-confetti'
 
-export function Board({ updateBoard, resetGame, turn, setTurn, winner, setWinner, checkWinner, addBoard, toogleVisible, isVisible }) {
+export function Board({ resetGame, turn, setTurn, winner, setWinner, checkWinner, addBoard, toogleVisible, isVisible }) {
   const [board, setBoard] = useState(() => {
     const boardFromStorage = window.localStorage.getItem('board')
     return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)
@@ -38,8 +38,6 @@ export function Board({ updateBoard, resetGame, turn, setTurn, winner, setWinner
   }
 
   function reset() {
-    // window.localStorage.removeItem('board');
-    // window.localStorage.removeItem('turn');
     const newBoard = Array(9).fill(null);
     setBoard(newBoard);
     resetGame();
