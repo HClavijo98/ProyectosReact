@@ -26,7 +26,6 @@ export function CartItem ({ title, image, price, quantity, addToCart }) {
 export function Cart () {
   const cartCheckboxId = useId()
   const { cart, clearCart, addToCart } = useCart()
-  console.log(cart)
   return (
     <>
       <label className='cart-button' htmlFor={cartCheckboxId}>
@@ -36,10 +35,10 @@ export function Cart () {
 
       <aside className='cart'>
         <ul>
-          {cart.map(product => (
+          {cart.map((product, index) => (
             <CartItem
-              key={product.id}
-              addToCart={() => addToCart(product)}
+              key={index}
+              addToCart={() => addToCart({ product })}
               {...product}
             />
           ))}
