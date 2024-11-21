@@ -1,23 +1,32 @@
-import HomePage from './pages/Home'
-import AboutPage from './pages/About'
+import { lazy, Suspense } from 'react'
 import { Router } from './components/Router'
 import { Page404 } from './pages/Page404'
+import { SearchPage } from './pages/Search'
+import { Route } from './components/Route'
 
-const routes = [
+const AboutPage = lazy(() => import('./pages/About')) // import dinamico
+const HomePage = lazy(() => import('./pages/Home')) // import dinamico
+
+const appRoutes = [
   {
-    path: '/',
-    Component: HomePage
+    path: '/:lang/about',
+    Component: AboutPage
   },
   {
-    path: '/about',
-    Component: AboutPage
+    path: '/search/:query',
+    Component: SearchPage
   }
 ]
 
 export function App () {
   return (
     <main>
-      <Router routes={routes} defaultComponent={Page404} />
+      <Suspense fallback={<div>Loading ...</div>}>
+        <Router routes={appRoutes} defaultComponent={Page404}>
+          <Route path='/' Component={HomePage} />
+          <Route path='/about' Component={AboutPage} />
+        </Router>
+      </Suspense>
     </main>
   )
 }
