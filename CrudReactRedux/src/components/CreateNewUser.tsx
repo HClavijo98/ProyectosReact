@@ -1,4 +1,4 @@
-import { Button, Card, TextInput, Title } from "@tremor/react";
+import { Badge, Button, Card, TextInput, Title } from "@tremor/react";
 import { useUserActions } from "../hooks/useUserActions"
 import { useState } from "react";
 
@@ -21,6 +21,8 @@ export function CreateNewUser () {
         }
 
         addUser({ name, email, github })
+        setResult('ok')
+        form.reset()
     }
     return (
         <Card style={{ marginTop: '16px' }}>
@@ -33,6 +35,10 @@ export function CreateNewUser () {
                     <Button type="submit" style={{ marginTop: '16px' }}>
                         Crear usuario
                     </Button>
+                    <span>
+                        {result === 'ok' && <Badge style={{color: 'green'}}>Guardado correctamente</Badge>}
+                        {result === 'ko' && <Badge style={{color: 'red'}}>Error con los campos</Badge>}
+                    </span>
                 </div>
             </form>
         </Card>
