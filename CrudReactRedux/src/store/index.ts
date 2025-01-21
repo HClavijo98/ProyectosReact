@@ -13,25 +13,41 @@ const syncWithDatabaseMiddleware: Middleware = store => next => action => {
 
 	next(action)
 
-	if (type === 'users/deleteUserById') {
-		const userIdToRemove = payload
-		const userToRemove = previousState.users.find(user => user.id === userIdToRemove)
+	if (type === 'users/addNewUser') {
+		const userToAdd = payload;
 
-		fetch(`https://jsonplaceholder.typicode.com/users/${userIdToRemove}`, {
-			method: 'DELETE'
-		})
-		.then(res => {
-			if (res.ok) {
-				toast.success(`Usuario ${payload} eliminado`)
-			}
-			throw new Error('Error al eliminar usuario')
-		})
-	    .catch(err => {
-			toast.error(`Error deleting user ${userIdToRemove}`)
-			if (userToRemove) store.dispatch(rollbackUser(userToRemove))
-			console.log(err)
-		})
+        if (userToAdd) {
+            toast.success(`Usuario ${userToAdd.name} añadido correctamente.`);
+        } else {
+            toast.error(`Error: el usuario con ID ${userToAdd} no se puede añadir.`);
+            store.dispatch(rollbackUser(userToAdd)); // Si existe lógica de rollback.
+        }
 	}
+
+	if (type === 'users/updateOldUser') {
+		const userToUpdate = payload;
+	
+		if (userToUpdate && userToUpdate.id) {
+			toast.success(`Usuario ${userToUpdate.name} actualizado correctamente.`);
+		} else {
+			toast.error(`Error: no se puede actualizar el usuario.`);
+			if (userToUpdate) {
+				store.dispatch(rollbackUser(userToUpdate)); // Asegúrate de que `rollbackUser` está bien definido.
+			}
+		}
+	}
+
+	if (type === 'users/deleteUserById') {
+        const userIdToRemove = payload;
+        const userToRemove = previousState.users.find(user => user.id === userIdToRemove);
+
+        if (userToRemove) {
+            toast.success(`Usuario ${userToRemove.name} eliminado correctamente.`);
+        } else {
+            toast.error(`Error: el usuario con ID ${userIdToRemove} no existe.`);
+            store.dispatch(rollbackUser(userToRemove)); // Si existe lógica de rollback.
+        }
+    }
 }
 
 export const store = configureStore({
